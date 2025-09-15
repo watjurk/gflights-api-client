@@ -26,10 +26,10 @@ async function main() {
     await updateCurrencyContext();
 
     const results = [];
-    
+
     const { getRate } = useCurrency();
     const { getLabelFromIATA } = useWikidata();
-    
+
     let { fromIATAs, toIATAs, maxTransfers } = input;
 
     invariant(fromIATAs, 'You must provide the fromIATAs list. This is an array of IATA codes of the airports you want to fly from. For example, ["PRG"].');
@@ -79,7 +79,7 @@ async function main() {
                 }
 
                 const h_departureDay = departureDay.toISOString().split('T')[0];
-                
+
                 for (let returnDay = new Date(dateFromRet); returnDay <= new Date(dateUntilRet); returnDay.setDate(returnDay.getDate() + 1)) {
                     if (lengthMin && returnDay - departureDay < lengthMin * 24 * 60 * 60 * 1000) continue;
                     if (lengthMax && returnDay - departureDay > lengthMax * 24 * 60 * 60 * 1000) break;
@@ -97,13 +97,13 @@ async function main() {
                             returnDay: h_returnDay,
                             maxTransfers
                         });
-                        
+
                         for (let i = 0; i < flights.length; i++) {
                             const flight = flights[i];
 
                             results.push(((x) => {
                                     const travelTime = (new Date(x.trip.tripStages.stages[x.trip.tripStages.stages.length - 1].arrivalTime) - new Date(x.trip.tripStages.stages[0].departureTime));
-                    
+
                                     return {
                                         ...x,
                                         fromIATA,
@@ -123,7 +123,7 @@ async function main() {
                                         returnDate: !oneWay && h_returnDay,
                                     };
                             })(flight));
-                            
+
                             if(process.env.PAID !== '1') {
                                 console.log(`Scraped ${fromName} -> ${toName} on ${h_departureDay}${!oneWay ? ` (back on ${h_returnDay})` : ''} for ${currency ?? 'USD'} ${getRate(flight.price.amount, flight.currency, currency ?? 'USD')}.`);
                             }

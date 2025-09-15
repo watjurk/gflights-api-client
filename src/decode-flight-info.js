@@ -1,11 +1,11 @@
-const protobuf = require("protobufjs");
+import protobuf from "protobufjs";
 
-async function decodeFlightInfo(base64encoded) {
+export async function decodeFlightInfo(base64encoded) {
     return new Promise(r => {
-        protobuf.load("test.proto", function(err, root) {
+        protobuf.load(import.meta.dirname + "/flight-info.proto", function(err, root) {
             if (err)
                 throw err;
-        
+
             const message = root.lookupType("FlightScraper.FlightInfo");
 
             const x = message.decode(Buffer.from(base64encoded, 'base64'));
@@ -14,8 +14,4 @@ async function decodeFlightInfo(base64encoded) {
             r(x);
         });
     });
-}
-
-module.exports = {
-    decodeFlightInfo
 }
