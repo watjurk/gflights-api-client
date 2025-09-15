@@ -3,7 +3,7 @@ import { decodeFlightInfo } from "./decode-flight-info.js";
 
 interface BestFlightsOptions extends RequestBodyOptions {
   oneWay: boolean;
-  maxTransfers: number; // 0 - any number of stops, 1 - direct flights, 2 - 1 stop, 3 - 2 stops
+  maxTransfers: number;
 }
 
 export async function getBestFlights({
@@ -95,7 +95,7 @@ class GoogleFlightsScraper {
     ).then((x) => x.bytes());
   }
 
-  parseResponseToMessages(response) {
+  parseResponseToMessages(response: Uint8Array) {
     const buffer = response;
 
     if (
@@ -122,12 +122,17 @@ class GoogleFlightsScraper {
       }
 
       let length = 0;
-      while (buffer[offset] >= 0x30 && buffer[offset] <= 0x39) {
-        length = length * 10 + (buffer[offset] - 0x30);
+      const currentByte = buffer[offset];
+      while (
+        currentByte !== undefined &&
+        currentByte >= 0x30 &&
+        currentByte <= 0x39
+      ) {
+        length = length * 10 + (currentByte - 0x30);
         offset++;
       }
 
-      if (buffer[offset] !== 0x0a) {
+      if (currentByte !== 0x0a) {
         throw new Error("Invalid message format");
       }
 
@@ -142,7 +147,7 @@ class GoogleFlightsScraper {
     return messages;
   }
 
-  parseJSONInMessages(messages) {
+  parseJSONInMessages(messages: string[]) {
     return messages
       .map((x) => JSON.parse(x))
       .filter((x) => x[0][0] === "wrb.fr")
@@ -153,13 +158,13 @@ class GoogleFlightsScraper {
       });
   }
 
-  async parseProtobufInJSONMessages(jsonMessages) {
+  async parseProtobufInJSONMessages(jsonMessages: string[][][][][][]) {
     for (let i = 2; i < 5; i++) {
-      const cursor = jsonMessages[0][2][i];
+      const cursor = jsonMessages[0]![2]![i];
 
       if (cursor) {
         try {
-          const base64strings = cursor[0].map((x) => JSON.parse(x[8])[0]);
+          const base64strings = cursor[0]!.map((x) => JSON.parse(x[8]!)[0]);
           return Promise.all(base64strings.map(decodeFlightInfo));
         } catch (e) {
           console.error(e);
