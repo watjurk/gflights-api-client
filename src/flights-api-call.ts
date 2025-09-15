@@ -2,7 +2,6 @@ import { buildRequestBody, type RequestBodyOptions } from "./request-body.js";
 import { decodeFlightInfo } from "./decode-flight-info.js";
 
 interface BestFlightsOptions extends RequestBodyOptions {
-  oneWay: boolean;
   maxTransfers: number;
 }
 
@@ -10,16 +9,12 @@ export async function getBestFlights({
   fromIATA,
   toIATA,
   departureDay,
-  oneWay,
-  returnDay,
   maxTransfers,
 }: BestFlightsOptions) {
   for (let repeat = 0; repeat < 3; repeat++) {
     try {
       return new GoogleFlightsScraper().retrieveBestFlights({
         departureDay,
-        oneWay,
-        returnDay,
         fromIATA,
         toIATA,
         maxTransfers,
@@ -35,16 +30,12 @@ export async function getBestFlights({
 class GoogleFlightsScraper {
   async retrieveBestFlights({
     departureDay,
-    oneWay,
-    returnDay,
     fromIATA,
     toIATA,
     maxTransfers,
   }: BestFlightsOptions) {
     const flightData = await this.fetchFlightData({
       departureDay,
-      oneWay,
-      returnDay,
       fromIATA,
       toIATA,
       maxTransfers,
@@ -56,8 +47,6 @@ class GoogleFlightsScraper {
 
   async fetchFlightData({
     departureDay,
-    oneWay,
-    returnDay,
     fromIATA,
     toIATA,
     maxTransfers,
@@ -79,7 +68,6 @@ class GoogleFlightsScraper {
         },
         body: buildRequestBody({
           departureDay: departureDay,
-          returnDay: oneWay ? undefined : returnDay,
           fromIATA: fromIATA,
           toIATA: toIATA,
           transfers:
