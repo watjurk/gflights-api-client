@@ -72,14 +72,14 @@ export class GoogleFlightsDecoder {
       });
   }
 
-  async parseProtobufInJSONMessages(jsonMessages: string[][][][][][]) {
+  async parseProtobufInJSONMessages<T>(jsonMessages: string[][][][][][]): Promise<T | undefined> {
     for (let i = 2; i < 5; i++) {
       const cursor = jsonMessages[0]![2]![i];
 
       if (cursor) {
         try {
           const base64strings = cursor[0]!.map((x) => JSON.parse(x[8]!)[0]);
-          return Promise.all(base64strings.map(this.decodeFlightInfo));
+          return Promise.all(base64strings.map(this.decodeFlightInfo)) as any;
         } catch (e) {
           console.error(e);
         }

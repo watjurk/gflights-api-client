@@ -2,7 +2,7 @@
 
 A highly experimental script for scraping flight ticket prices from Google Flights. Decodes the protobuf data returned by Google Flights and returns a JSON array with the results.
 
-Installation
+## Installation
 
 ```bash
 npm install gflights
@@ -10,7 +10,7 @@ npm install gflights
 # ...
 ```
 
-Usage
+## Usage
 
 ```javascript
 import { GoogleFlights } from "gflights";

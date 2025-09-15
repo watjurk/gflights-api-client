@@ -34,3 +34,37 @@ message FlightInfo {
     Price price = 3;
     TripInfo trip = 4;
 }`;
+
+interface TripStage {
+    fromIATA: string
+    departureTime: string
+    toIATA: string
+    arrivalTime: string
+    carrierCode: string
+    flightNumber: string
+    aircraftIATA: string
+}
+
+interface CarrierNames {
+    name: string[]
+}
+
+interface TripStages {
+    stages: TripStage[]
+}
+
+interface TripInfo {
+    tripStages: TripStages
+    carriers: CarrierNames
+}
+
+interface Price {
+    amount: number
+}
+
+export interface FlightInfo {
+    precision: number
+    currency: string
+    price: Price
+    trip: TripInfo
+}

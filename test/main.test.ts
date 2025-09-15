@@ -12,5 +12,5 @@ test("works", async () => {
   expect(flights).toBeDefined();
   expect(flights).toBeInstanceOf(Array);
   expect(flights?.length).toBeGreaterThan(0);
-  expect((flights?.[0] as any).price).toBeDefined();
+  expect(flights?.[0].price).toBeDefined();
 });

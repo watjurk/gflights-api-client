@@ -2,13 +2,14 @@ import {
   GoogleFlightsDecoder as Decoder,
   type OneWayOptions,
 } from "./decoder.js";
+import type { FlightInfo } from "./protobuf/flight-info.proto.js";
 import { RequestBuilder } from "./request-body.js";
 
 export class GoogleFlights {
   decoder = new Decoder();
   requestBuilder = new RequestBuilder();
 
-  async searchOneWay(options: OneWayOptions) {
+  async searchOneWay(options: OneWayOptions): Promise<FlightInfo[]> {
     const { fromIATA, toIATA, departureDay, maxTransfers } = options;
 
     const flightData = await this.fetchFlightData({
@@ -19,7 +20,7 @@ export class GoogleFlights {
     });
     const messages = this.decoder.parseResponseToMessages(flightData);
     const protobuf = this.decoder.parseJSONInMessages(messages);
-    return this.decoder.parseProtobufInJSONMessages(protobuf);
+    return (await this.decoder.parseProtobufInJSONMessages<FlightInfo[]>(protobuf) ?? []);
   }
 
   async fetchFlightData({
