@@ -1,5 +1,10 @@
-import { buildRequestBody } from "./request-body.js";
+import { buildRequestBody, type RequestBodyOptions } from "./request-body.js";
 import { decodeFlightInfo } from "./decode-flight-info.js";
+
+interface BestFlightsOptions extends RequestBodyOptions {
+  oneWay: boolean;
+  maxTransfers: number; // 0 - any number of stops, 1 - direct flights, 2 - 1 stop, 3 - 2 stops
+}
 
 export async function getBestFlights({
   fromIATA,
@@ -8,17 +13,17 @@ export async function getBestFlights({
   oneWay,
   returnDay,
   maxTransfers,
-}) {
+}: BestFlightsOptions) {
   for (let repeat = 0; repeat < 3; repeat++) {
     try {
-      return new GoogleFlightsScraper().retrieveBestFlights(
+      return new GoogleFlightsScraper().retrieveBestFlights({
         departureDay,
         oneWay,
         returnDay,
         fromIATA,
         toIATA,
         maxTransfers,
-      );
+      });
     } catch (e) {
       console.error(e);
     }
@@ -28,35 +33,35 @@ export async function getBestFlights({
 }
 
 class GoogleFlightsScraper {
-  async retrieveBestFlights(
+  async retrieveBestFlights({
     departureDay,
     oneWay,
     returnDay,
     fromIATA,
     toIATA,
     maxTransfers,
-  ) {
-    const flightData = await this.fetchFlightData(
+  }: BestFlightsOptions) {
+    const flightData = await this.fetchFlightData({
       departureDay,
       oneWay,
       returnDay,
       fromIATA,
       toIATA,
       maxTransfers,
-    );
+    });
     const messages = this.parseResponseToMessages(flightData);
     const protobuf = this.parseJSONInMessages(messages);
     return this.parseProtobufInJSONMessages(protobuf);
   }
 
-  async fetchFlightData(
+  async fetchFlightData({
     departureDay,
     oneWay,
     returnDay,
     fromIATA,
     toIATA,
     maxTransfers,
-  ) {
+  }: BestFlightsOptions) {
     return fetch(
       "https://www.google.com/_/FlightsFrontendUi/data/travel.frontend.flights.FlightsFrontendService/GetShoppingResults",
       {

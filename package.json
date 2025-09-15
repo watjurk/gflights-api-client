@@ -1,14 +1,18 @@
 {
-  "name": "google-flights-scraper",
+  "name": "google-flights-lib",
   "version": "1.0.0",
-  "description": "",
+  "description": "A library for scraping flight information from Google Flights",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "start": "node index.js",
     "build": "tsc"
   },
   "keywords": [],
-  "author": "",
+  "author": {
+    "url": "https://jindrich.bar",
+    "name": "Jindřich Bär"
+  },
   "license": "ISC",
   "dependencies": {
     "protobufjs": "^7.2.5",

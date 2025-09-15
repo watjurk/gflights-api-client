@@ -1,10 +1,18 @@
+export interface RequestBodyOptions {
+  fromIATA: string;
+  toIATA: string;
+  departureDay: string;
+  returnDay?: string | undefined;
+  transfers?: string; // 0 - any number of stops, 1 - direct flights, 2 - 1 stop, 3 - 2 stops
+}
+
 export function buildRequestBody({
   fromIATA,
   toIATA,
   departureDay,
   returnDay,
   transfers,
-}) {
+}: RequestBodyOptions): string {
   const dateDeparture = new Date(departureDay)
     .toLocaleDateString("en-GB")
     .split("/")
