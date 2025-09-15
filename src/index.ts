@@ -1,1 +1,62 @@
-export { getBestFlights } from "./flights-api-call.js";
+import {
+  GoogleFlightsDecoder as Decoder,
+  type OneWayOptions,
+} from "./decoder.js";
+import { RequestBuilder } from "./request-body.js";
+
+export class GoogleFlights {
+  decoder = new Decoder();
+  requestBuilder = new RequestBuilder();
+
+  async searchOneWay(options: OneWayOptions) {
+    const { fromIATA, toIATA, departureDay, maxTransfers } = options;
+
+    const flightData = await this.fetchFlightData({
+      departureDay,
+      fromIATA,
+      toIATA,
+      maxTransfers,
+    });
+    const messages = this.decoder.parseResponseToMessages(flightData);
+    const protobuf = this.decoder.parseJSONInMessages(messages);
+    return this.decoder.parseProtobufInJSONMessages(protobuf);
+  }
+
+  async fetchFlightData({
+    departureDay,
+    fromIATA,
+    toIATA,
+    maxTransfers,
+  }: OneWayOptions) {
+    return fetch(
+      "https://www.google.com/_/FlightsFrontendUi/data/travel.frontend.flights.FlightsFrontendService/GetShoppingResults",
+      {
+        method: "POST",
+        headers: {
+          "User-Agent":
+            "Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/130.0",
+          Accept: "*/*",
+          "Accept-Language": "en;q=0.7,en-US;q=0.3",
+          "X-Same-Domain": "1",
+          "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
+          "Sec-Fetch-Dest": "empty",
+          "Sec-Fetch-Mode": "cors",
+          "Sec-Fetch-Site": "same-origin",
+        },
+        body: this.requestBuilder.buildRequestBody({
+          departureDay: departureDay,
+          fromIATA: fromIATA,
+          toIATA: toIATA,
+          transfers:
+            maxTransfers == 0
+              ? "1"
+              : maxTransfers == 1
+                ? "2"
+                : maxTransfers == 2
+                  ? "3"
+                  : "0",
+        }),
+      },
+    ).then((x) => x.bytes());
+  }
+}

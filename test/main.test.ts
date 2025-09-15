@@ -1,12 +1,12 @@
 import { expect, test } from "vitest";
-import { getBestFlights } from "../src/index.js";
+import { GoogleFlights } from "../src/index.js";
 
 test("works", async () => {
-  const flights = await getBestFlights({
+  const flights = await new GoogleFlights().searchOneWay({
     fromIATA: "PRG",
     toIATA: "EDI",
     departureDay: "2025-12-20",
-    maxTransfers: 1,
+    maxTransfers: 0,
   });
 
   expect(flights).toBeDefined();
