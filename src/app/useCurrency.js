@@ -1,18 +1,20 @@
 const currencyContext = {};
 
 const updateCurrencyContext = async () => {
-    currencyContext.currency = 'USD';
+  currencyContext.currency = "USD";
 
-    const { rates } = await (await fetch('https://open.er-api.com/v6/latest/USD')).json();
+  const { rates } = await (
+    await fetch("https://open.er-api.com/v6/latest/USD")
+  ).json();
 
-    currencyContext.rates = rates;
-    currencyContext.getRate = (amount, fromCurrency, toCurrency) => {
-        return Math.floor((amount / rates[fromCurrency]) * rates[toCurrency]);
-    }
-}
+  currencyContext.rates = rates;
+  currencyContext.getRate = (amount, fromCurrency, toCurrency) => {
+    return Math.floor((amount / rates[fromCurrency]) * rates[toCurrency]);
+  };
+};
 
 const useCurrency = () => {
-    return currencyContext;
-}
+  return currencyContext;
+};
 
 module.exports = { updateCurrencyContext, useCurrency };
