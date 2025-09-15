@@ -961,6 +961,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"gflights@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "gflights@workspace:."
+  dependencies:
+    "@types/node": "npm:^24.4.0"
+    prettier: "npm:^3.6.2"
+    protobufjs: "npm:^7.2.5"
+    typescript: "npm:^5.9.2"
+    vitest: "npm:^3.2.4"
+  languageName: unknown
+  linkType: soft
+
 "glob@npm:^10.2.2":
   version: 10.4.5
   resolution: "glob@npm:10.4.5"
@@ -1074,18 +1086,6 @@ __metadata:
   checksum: 10c0/68dcab8f233dde211a6b5fd98079783cbcd04b53617c1250e3553ee16ab3e6134f5e65478e41d82f6d351a052a63d71024553933808570f04dbf828d7921e80e
   languageName: node
   linkType: hard
-
-"lib-gflights@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "lib-gflights@workspace:."
-  dependencies:
-    "@types/node": "npm:^24.4.0"
-    prettier: "npm:^3.6.2"
-    protobufjs: "npm:^7.2.5"
-    typescript: "npm:^5.9.2"
-    vitest: "npm:^3.2.4"
-  languageName: unknown
-  linkType: soft
 
 "long@npm:^5.0.0":
   version: 5.3.2

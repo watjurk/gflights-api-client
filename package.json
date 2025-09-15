@@ -1,5 +1,5 @@
 {
-  "name": "lib-gflights",
+  "name": "gflights",
   "version": "0.1.0",
   "description": "A library for scraping flight information from Google Flights",
   "main": "dist/index.js",
