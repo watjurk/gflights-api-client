@@ -1,6 +1,6 @@
 {
   "name": "gflights",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A library for scraping flight information from Google Flights",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -9,6 +9,7 @@
   ],
   "type": "module",
   "scripts": {
+    "prepare": "npm run build",
     "build": "tsc",
     "test": "vitest",
     "format": "prettier --write ."
@@ -19,6 +20,10 @@
     "name": "Jindřich Bär"
   },
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/watjurk/gflights-api-client.git"
+  },
   "dependencies": {
     "protobufjs": "^7.2.5"
   },

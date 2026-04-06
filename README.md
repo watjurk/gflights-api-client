@@ -4,10 +4,22 @@ A highly experimental script for scraping flight ticket prices from Google Fligh
 
 ## Installation
 
+From npm (if published under that name):
+
 ```bash
 npm install gflights
-# yarn add gflights
-# ...
+```
+
+From this GitHub fork (builds on install via `prepare`):
+
+```bash
+npm install github:watjurk/gflights-api-client
+```
+
+Pin a version with a [release tag](https://github.com/watjurk/gflights-api-client/releases):
+
+```bash
+npm install github:watjurk/gflights-api-client#v0.1.1
 ```
 
 ## Usage
