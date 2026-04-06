@@ -4,6 +4,7 @@ import { flightInfo } from "./protobuf/flight-info.proto.js";
 
 export interface OneWayOptions extends RequestBodyOptions {
   maxTransfers: number;
+  currency?: string;
 }
 
 export class GoogleFlightsDecoder {
@@ -73,8 +74,12 @@ export class GoogleFlightsDecoder {
   }
 
   async parseProtobufInJSONMessages<T>(jsonMessages: string[][][][][][]): Promise<T | undefined> {
+    const payload = jsonMessages[0]?.[2];
+    if (!payload) {
+      return undefined;
+    }
     for (let i = 2; i < 5; i++) {
-      const cursor = jsonMessages[0]![2]![i];
+      const cursor = payload[i];
 
       if (cursor) {
         try {
